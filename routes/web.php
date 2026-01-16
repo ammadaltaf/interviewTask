@@ -8,19 +8,9 @@ use App\Http\Controllers\OrderController;
 // Route::get('/', function () {
 //     return view('welcome');
 // });
-Route::middleware(['auth'])->group(function () {
 
-    // Route::get('/dashboard', function () {
-    //     return view('dashboard');
-    // })->name('dashboard');
-
-    // Products pages
-    Route::Resource('products', ProductController::class)->names('products');
-
-    // Orders pages
-    Route::get('/orders', [OrderController::class, 'index'])
-        ->name('orders.index');
-});
+Route::view('/login','auth.login')->name('login');
+Route::view('/products/create','products.create')->middleware('auth:sanctum');
 
 Route::get('/login', function () {
     return 'Login page';
