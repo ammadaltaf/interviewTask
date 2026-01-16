@@ -15,16 +15,22 @@ class AuthController extends Controller
         $data = $request->validated();
 
         $user = User::create([
-            'name'=>$data['name'],
-            'email'=>$data['email'],
-            'password'=>Hash::make($data['password']),
-            'role_id'=>1 // admin default or change
+            'name'     => $data['name'],
+            'email'    => $data['email'],
+            'password' => Hash::make($data['password']),
+            'role_id'  => 1
         ]);
 
-        Auth::login($user); // IMPORTANT for Sanctum cookie
+        // ✅ Create Sanctum token
+        $token = $user->createToken('api')->plainTextToken;
 
-        return response()->json(['message'=>'Registered','user'=>$user],201);
+        return response()->json([
+            'message' => 'Registered successfully',
+            'user'    => $user,
+            'token'   => $token
+        ], 201);
     }
+
     public function login(Request $request)
     {
         if (!Auth::attempt($request->only('email','password'))) {
